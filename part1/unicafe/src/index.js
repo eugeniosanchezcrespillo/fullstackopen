@@ -10,6 +10,19 @@ const App = () => {
   const Counter = (props) => (
     <button onClick={props.handleClick}>{props.title}</button>
   );
+
+  const total = ({ good, bad, neutral }) => good + bad + neutral;
+
+  const average = ({ good, bad, neutral }) => {
+    if (good + neutral + bad === 0) return 'No votes yet';
+    return (good * 1 - bad) / total({ good, bad, neutral });
+  };
+
+  const positive = ({ good, bad, neutral }) => {
+    if (good + neutral + bad === 0) return 'No votes yet';
+    return (good / total({ good, bad, neutral })) * 100 + ' %';
+  };
+
   return (
     <div>
       <h2>give feedback</h2>
@@ -24,6 +37,12 @@ const App = () => {
       neutral {neutral}
       <br />
       bad {bad}
+      <br />
+      all {total({ good, bad, neutral })}
+      <br />
+      average {average({ good, bad, neutral })}
+      <br />
+      positive {positive({ good, bad, neutral })}
     </div>
   );
 };
