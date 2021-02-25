@@ -5,14 +5,21 @@ const Statistics = ({ good, bad, neutral }) => {
   const total = ({ good, bad, neutral }) => good + bad + neutral;
 
   const average = ({ good, bad, neutral }) => {
-    if (good + neutral + bad === 0) return 'No votes yet';
     return (good * 1 - bad) / total({ good, bad, neutral });
   };
 
   const positive = ({ good, bad, neutral }) => {
-    if (good + neutral + bad === 0) return 'No votes yet';
     return (good / total({ good, bad, neutral })) * 100 + ' %';
   };
+
+  if (good + neutral + bad === 0)
+    return (
+      <div>
+        <h2>statistics</h2>
+        <br />
+        No feedback given
+      </div>
+    );
 
   return (
     <div>
