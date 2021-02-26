@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
+const AnecdoteMostVoted = ({ anecdotes, votes }) => {
+  const max = Math.max(...votes);
+  const index = anecdotes.indexOf(anecdotes[max]);
+  return anecdotes[index];
+};
+
 const App = (props) => {
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
@@ -26,6 +32,9 @@ const App = (props) => {
       >
         next anecdote
       </button>
+
+      <h2>Anecdote with most votes </h2>
+      {props.anecdotes[votes.indexOf(Math.max(...votes))]}
     </div>
   );
 };
