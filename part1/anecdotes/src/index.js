@@ -3,10 +3,21 @@ import ReactDOM from 'react-dom';
 
 const App = (props) => {
   const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
+
+  const updateVote = () => {
+    const newVote = [...votes];
+    newVote[selected] += 1;
+    setVotes(newVote);
+  };
 
   return (
     <div>
+      <h2>Anecdote of the day </h2>
+
       <p>{props.anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
+      <button onClick={updateVote}>vote</button>
 
       <button
         onClick={() =>
