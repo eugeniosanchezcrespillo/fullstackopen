@@ -22,8 +22,11 @@ const Content = ({ parts }) => {
 
 const Total = ({ parts }) => {
   console.log(parts);
-  let total = 0;
-  parts.map((item) => (total += item.exercises));
+  const exercises = parts.map((item) => item.exercises);
+  const total = exercises.reduce((s, p) => {
+    console.log('what is happening', s, p);
+    return s + p;
+  });
 
   return <b>Total of {total} exercises</b>;
 };
