@@ -1,6 +1,7 @@
 import React from 'react';
+import ShowCountry from './ShowCountry';
 
-const ShowCountries = ({ search, countries }) => {
+const ShowCountries = ({ handleShow, search, countries }) => {
   const filter = search
     ? countries.filter((country) =>
         country.name.toLowerCase().includes(search.toLowerCase())
@@ -12,26 +13,18 @@ const ShowCountries = ({ search, countries }) => {
   if (filter.length > 10) {
     return <div>Too many matches, specify another filter</div>;
   } else if (filter.length === 1) {
-    return filter.map((c) => (
-      <div key={c.name}>
-        <h1>{c.name}</h1>
-        <p>capital {c.capital}</p>
-        <p>population {c.population}</p>
-        <h2>languages</h2>
-        <ul>
-          {c.languages.map((item) => (
-            <li key={item.iso639_1}>{item.name}</li>
-          ))}
-        </ul>
-        <img src={c.flag} width="200px" />
-      </div>
-    ));
+    return <ShowCountry country={filter} />;
   } else {
     return (
       <div>
         <ul>
           {filter.map((item) => (
-            <p key={item.name}>{item.name}</p>
+            <p key={item.name}>
+              {item.name}
+              <button value={item.name} onClick={handleShow}>
+                show
+              </button>
+            </p>
           ))}
         </ul>
         {/* Debug: {countries.map((country) => country.name)} */}
@@ -39,4 +32,5 @@ const ShowCountries = ({ search, countries }) => {
     );
   }
 };
+
 export default ShowCountries;

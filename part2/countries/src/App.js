@@ -12,6 +12,11 @@ const App = () => {
     setSearch(event.target.value);
   };
 
+  const handleShow = (event) => {
+    console.log('button value', event.target.value);
+    setSearch(event.target.value);
+  };
+
   useEffect(() => {
     axios.get('https://restcountries.eu/rest/v2/all').then((response) => {
       console.log(response.data);
@@ -22,7 +27,11 @@ const App = () => {
   return (
     <div>
       <Search handleSearch={handleSearch} search={search} />
-      <ShowCountries search={search} countries={countries} />
+      <ShowCountries
+        handleShow={handleShow}
+        search={search}
+        countries={countries}
+      />
     </div>
   );
 };
