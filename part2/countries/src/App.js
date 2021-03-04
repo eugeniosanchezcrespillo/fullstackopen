@@ -5,6 +5,7 @@ import ShowCountries from './Components/ShowCountries';
 
 const App = () => {
   const [countries, setCountries] = useState([]);
+  const [weather, setWeather] = useState([]);
   const [search, setSearch] = useState('');
 
   const handleSearch = (event) => {
@@ -23,6 +24,15 @@ const App = () => {
       setCountries(response.data);
     });
   }, []);
+
+  axios
+    .get(
+      `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=Madrid`
+    )
+    .then((response) => {
+      console.log('weather', response.data);
+      //setWeather(response.data);
+    });
 
   return (
     <div>

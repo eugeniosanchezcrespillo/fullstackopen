@@ -1,5 +1,13 @@
 import React from 'react';
 
+const ShowPerson = ({ name, number }) => {
+  return (
+    <p key={name}>
+      {name} {number}
+    </p>
+  );
+};
+
 const ShowPeople = ({ persons, newSearch }) => {
   const filtered = newSearch
     ? persons.filter((person) =>
@@ -9,13 +17,9 @@ const ShowPeople = ({ persons, newSearch }) => {
 
   return (
     <div>
-      {filtered.map((person) => {
-        return (
-          <p key={person.name}>
-            {person.name} {person.number}
-          </p>
-        );
-      })}
+      {filtered.map((person) => (
+        <ShowPerson name={person.name} number={person.number} />
+      ))}
     </div>
   );
 };

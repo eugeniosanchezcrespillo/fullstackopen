@@ -32,10 +32,8 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    //console.log('button clicked', event.target);
     const exist = persons.filter((person) => person.name === newName);
 
-    //console.log('exist', exist);
     if (exist.length > 0) {
       alert(`${newName} is already added to phonebook`);
     } else {
@@ -43,9 +41,13 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-      setPersons(persons.concat(personObject));
-      setNewName('');
-      setNewNumber('');
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then((response) => {
+          setPersons(persons.concat(response.personObject));
+          setNewName('');
+          setNewNumber('');
+        });
     }
   };
 
