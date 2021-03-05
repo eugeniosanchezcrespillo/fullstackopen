@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ShowPeople from './Components/ShowPeople';
 import Filter from './Components/Filter';
 import PersonForm from './Components/PersonForm';
-import axios from 'axios';
+import personService from './Services/persons';
 
 const App = () => {
   /* const [persons, setPersons] = useState([
@@ -17,14 +17,12 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [newSearch, setNewSearch] = useState('');
 
-  const hook = () => {
-    axios.get('http://localhost:3001/persons').then((response) => {
-      setPersons(response.data);
-      console.log(response.data);
+  useEffect(() => {
+    personService.getAll().then((response) => {
+      setPersons(response);
+      console.log(response);
     });
-  };
-
-  useEffect(hook, []);
+  }, []);
 
   const handleSearch = (event) => setNewSearch(event.target.value);
   const handlePersonChange = (event) => setNewName(event.target.value);
@@ -41,15 +39,20 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-      axios
-        .post('http://localhost:3001/persons', personObject)
-        .then((response) => {
-          setPersons(persons.concat(response.personObject));
-          setNewName('');
-          setNewNumber('');
-        });
+
+      personService.create(personObject).then((personObject) => {
+        setPersons(persons.concat(personObject));
+        setNewName('');
+        setNewNumber('');
+      });
     }
   };
+
+  const filtered = newSearch
+    ? persons.filter((person) =>
+        person.name.toLowerCase().includes(newSearch.trim().toLowerCase())
+      )
+    : persons;
 
   return (
     <div>
@@ -68,7 +71,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <ShowPeople persons={persons} newSearch={newSearch} />
+      <ShowPeople persons={filtered} />
     </div>
   );
 };
