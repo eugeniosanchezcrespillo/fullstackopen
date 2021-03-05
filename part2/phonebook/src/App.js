@@ -17,6 +17,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [newSearch, setNewSearch] = useState('');
 
+  //getAll()
   useEffect(() => {
     personService.getAll().then((response) => {
       setPersons(response);
@@ -27,7 +28,18 @@ const App = () => {
   const handleSearch = (event) => setNewSearch(event.target.value);
   const handlePersonChange = (event) => setNewName(event.target.value);
   const handleNumberChange = (event) => setNewNumber(event.target.value);
+  const handleDelete = (id, name) => () => {
+    if (window.confirm(`Delete ${name}?`)) {
+      personService.deleteperson(id).then((deleted) => {
+        const filteredDeleted = persons.filter((person) => person.id !== id);
+        console.log('filteredDeleted', filteredDeleted);
+        setPersons(filteredDeleted);
+        window.alert(`Deleted ${name} from List`);
+      });
+    }
+  };
 
+  // AddPerson
   const addPerson = (event) => {
     event.preventDefault();
     const exist = persons.filter((person) => person.name === newName);
@@ -48,6 +60,7 @@ const App = () => {
     }
   };
 
+  //Filtered Search
   const filtered = newSearch
     ? persons.filter((person) =>
         person.name.toLowerCase().includes(newSearch.trim().toLowerCase())
@@ -71,7 +84,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <ShowPeople persons={filtered} />
+      <ShowPeople persons={filtered} handleDelete={handleDelete} />
     </div>
   );
 };

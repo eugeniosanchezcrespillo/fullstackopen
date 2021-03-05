@@ -1,24 +1,15 @@
 import React from 'react';
 
-const ShowPerson = ({ name, number }) => {
-  return (
-    <>
-      {name} {number}
-    </>
-  );
-};
-
-const ShowPeople = ({ persons }) => {
-  console.log('error persons', persons);
+const ShowPeople = ({ persons, handleDelete }) => {
+  console.log('ShowPeople', persons);
   return (
     <div>
-      <ul>
-        {persons.map((item, i) => (
-          <li key={i}>
-            <ShowPerson name={item.name} number={item.number} />
-          </li>
-        ))}
-      </ul>
+      {persons.map((item, i) => (
+        <div key={i}>
+          {item.name} {item.number}
+          <button onClick={handleDelete(item.id, item.name)}>delete</button>
+        </div>
+      ))}
     </div>
   );
 };
