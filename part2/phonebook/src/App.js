@@ -78,7 +78,10 @@ const App = () => {
             setTimeout(() => {
               setErrorMessage(null);
             }, 5000);
-          });
+          })
+          .catch((error) =>
+            setErrorMessage(`Error Id: ${personChanged.id} doesn't exists.`)
+          );
       }
     } else {
       const personObject = {
@@ -116,6 +119,7 @@ const App = () => {
 
       <h2>add a new</h2>
       <Notification message={errorMessage} />
+
       <PersonForm
         addPerson={addPerson}
         handleNumberChange={handleNumberChange}
