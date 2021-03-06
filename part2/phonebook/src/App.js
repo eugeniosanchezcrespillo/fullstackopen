@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ShowPeople from './Components/ShowPeople';
 import Filter from './Components/Filter';
 import PersonForm from './Components/PersonForm';
+import Notification from './Components/Notification';
 import personService from './Services/persons';
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [newSearch, setNewSearch] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   //getAll()
   useEffect(() => {
@@ -34,6 +36,11 @@ const App = () => {
         const filteredDeleted = persons.filter((person) => person.id !== id);
         console.log('filteredDeleted', filteredDeleted);
         setPersons(filteredDeleted);
+        setErrorMessage(`Person deleted from the phonebook`);
+
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
         //window.alert(`Deleted ${name} from List`);
       });
     }
@@ -42,14 +49,18 @@ const App = () => {
   // AddPerson or Change Person
   const addPerson = (event) => {
     event.preventDefault();
-    const exist = persons.filter((person) => person.name === newName);
+    const exist = persons.filter(
+      (person) => person.name.toLowerCase() === newName.toLowerCase()
+    );
     if (exist.length > 0) {
       if (
         window.confirm(
           `${newName} is already added to phonebook. replace the old number with a new one: ${newNumber}?`
         )
       ) {
-        const personToChange = persons.find((p) => p.name === newName);
+        const personToChange = persons.find(
+          (p) => p.name.toLowerCase() === newName.toLowerCase()
+        );
         const personChanged = { ...personToChange };
         personChanged.number = newNumber;
         console.log('person match', personChanged);
@@ -62,6 +73,11 @@ const App = () => {
                 person.id !== personChanged.id ? person : personChanged
               )
             );
+            setErrorMessage(`${personChanged.name} changed on the phonebook`);
+
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000);
           });
       }
     } else {
@@ -74,14 +90,21 @@ const App = () => {
         setPersons(persons.concat(personObject));
         setNewName('');
         setNewNumber('');
+
+        setErrorMessage(`${personObject.name} added to the phonebook`);
+
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
       });
     }
   };
 
   //Filtered Search
+  console.log('new Search', newSearch);
   const filtered = newSearch
-    ? persons.filter((person) =>
-        person.name.toLowerCase().includes(newSearch.trim().toLowerCase())
+    ? persons.filter((p) =>
+        p.name.toLowerCase().includes(newSearch.trim().toLowerCase())
       )
     : persons;
 
@@ -92,7 +115,7 @@ const App = () => {
       <Filter handleSearch={handleSearch} newSearch={newSearch} />
 
       <h2>add a new</h2>
-
+      <Notification message={errorMessage} />
       <PersonForm
         addPerson={addPerson}
         handleNumberChange={handleNumberChange}

@@ -1,11 +1,8 @@
 {
   "persons": [
     {
-      "id": 1
-    },
-    {
       "name": "Ada Lovelace",
-      "number": "39-44-5323523",
+      "number": "345535434",
       "id": 2
     },
     {
@@ -22,6 +19,16 @@
       "name": "Arto Hellas",
       "number": "4565646",
       "id": 5
+    },
+    {
+      "name": "Peppa",
+      "number": "29411289",
+      "id": 6
+    },
+    {
+      "name": "Sky",
+      "number": "4252325fs",
+      "id": 7
     }
   ]
 }
