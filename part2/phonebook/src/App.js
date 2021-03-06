@@ -29,23 +29,41 @@ const App = () => {
   const handlePersonChange = (event) => setNewName(event.target.value);
   const handleNumberChange = (event) => setNewNumber(event.target.value);
   const handleDelete = (id, name) => () => {
-    if (window.confirm(`Delete ${name}?`)) {
-      personService.deleteperson(id).then((deleted) => {
+    if (window.confirm(`Delete ${name} id: ${id}?`)) {
+      personService.deletePerson(id).then((deleted) => {
         const filteredDeleted = persons.filter((person) => person.id !== id);
         console.log('filteredDeleted', filteredDeleted);
         setPersons(filteredDeleted);
-        window.alert(`Deleted ${name} from List`);
+        //window.alert(`Deleted ${name} from List`);
       });
     }
   };
 
-  // AddPerson
+  // AddPerson or Change Person
   const addPerson = (event) => {
     event.preventDefault();
     const exist = persons.filter((person) => person.name === newName);
-
     if (exist.length > 0) {
-      alert(`${newName} is already added to phonebook`);
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook. replace the old number with a new one: ${newNumber}?`
+        )
+      ) {
+        const personToChange = persons.find((p) => p.name === newName);
+        const personChanged = { ...personToChange };
+        personChanged.number = newNumber;
+        console.log('person match', personChanged);
+
+        personService
+          .updatePerson(personChanged.id, personChanged)
+          .then((personObject) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== personChanged.id ? person : personChanged
+              )
+            );
+          });
+      }
     } else {
       const personObject = {
         name: newName,
