@@ -1,9 +1,3 @@
-/* const http = require('http'); */
-/* const app = http.createServer((request, response) => {
-  response.writeHead(200, { 'Content-Type': 'application/json' });
-  response.end(JSON.stringify(persons));
-}); */
-
 const express = require('express');
 const app = express();
 
@@ -26,6 +20,14 @@ app.get('/', (request, response) => {
 
 app.get('/api/persons', (request, response) => {
   response.json(persons);
+});
+
+app.get('/info', (request, response) => {
+  const entries = persons.length;
+  const dateinfo = new Date();
+  const day = dateinfo.getUTCDate();
+  response.send(`Phonebook has info for ${entries} people<br />
+  ${dateinfo.toString()}`);
 });
 
 const PORT = 3001;
