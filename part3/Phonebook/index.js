@@ -57,9 +57,14 @@ const generateId = () => {
 app.post('/api/persons', (request, response) => {
   const body = request.body;
 
-  if (!body.name || !body.number) {
+  if (!body.name || !body.number)
     return response.status(400).json({ error: 'Name or Number missing' });
-  }
+
+  const duplicate = persons.filter((p) => p.name === body.name);
+  if (duplicate.length > 0)
+    return response
+      .status(409)
+      .json({ error: `${body.name} is already in the Phonebook` });
 
   const person = {
     id: generateId(),
