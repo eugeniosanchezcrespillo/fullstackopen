@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
 
 let persons = [
   {
@@ -42,6 +43,32 @@ app.get('/api/persons/:id', (request, response) => {
   const person = persons.find((p) => p.id === id);
   if (person) response.json(person);
   else response.status(404).end();
+});
+
+const generateId = () => {
+  /* const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
+  return maxId + 1; */
+  const min = Math.ceil(7);
+  const max = Math.floor(10000000000);
+  //The maximum is exclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min) + min);
+};
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body;
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({ error: 'Name or Number missing' });
+  }
+
+  const person = {
+    id: generateId(),
+    name: body.name,
+    number: body.number,
+  };
+
+  persons = persons.concat(person);
+  response.json(person);
 });
 
 app.delete('/api/persons/:id', (request, response) => {
