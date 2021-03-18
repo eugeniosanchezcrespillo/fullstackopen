@@ -12,6 +12,21 @@ let persons = [
     name: 'Ada Lovelace',
     number: '039-44-5323523',
   },
+  {
+    id: 3,
+    name: 'Dan Abramov',
+    number: '39-44-5323523',
+  },
+  {
+    id: 4,
+    name: 'Mary Poppendick',
+    number: '12-43-234345',
+  },
+  {
+    id: 5,
+    name: 'peppa pig (delete)',
+    number: '123456-789',
+  },
 ];
 
 app.get('/', (request, response) => {
@@ -27,6 +42,13 @@ app.get('/api/persons/:id', (request, response) => {
   const person = persons.find((p) => p.id === id);
   if (person) response.json(person);
   else response.status(404).end();
+});
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id);
+  persons = persons.filter((p) => p.id !== id);
+  console.log(`Deleting ${id}`);
+  response.status(204).end();
 });
 
 app.get('/info', (request, response) => {
