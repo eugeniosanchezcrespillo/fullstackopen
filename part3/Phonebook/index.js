@@ -5,7 +5,15 @@ const app = express();
 
 app.use(express.json());
 //:method :url :status :res[content-length] - :response-time ms
-app.use(morgan('tiny'));
+morgan.token('postinfo', (req, res) => {
+  return 'POST' === req.method ? JSON.stringify(req.body) : '';
+});
+
+app.use(
+  morgan(
+    ':method :url :status :res[content-length] - :response-time ms :postinfo'
+  )
+);
 
 let persons = [
   {
