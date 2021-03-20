@@ -1,6 +1,11 @@
 const express = require('express');
+const morgan = require('morgan');
+
 const app = express();
+
 app.use(express.json());
+//:method :url :status :res[content-length] - :response-time ms
+app.use(morgan('tiny'));
 
 let persons = [
   {
@@ -35,6 +40,9 @@ app.get('/', (request, response) => {
 });
 
 app.get('/api/persons', (request, response) => {
+  morgan.token('type', function (req, res) {
+    return req.headers['content-type'];
+  });
   response.json(persons);
 });
 
@@ -46,8 +54,8 @@ app.get('/api/persons/:id', (request, response) => {
 });
 
 const generateId = () => {
-  /* const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
-  return maxId + 1; */
+  //const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
+  //return maxId + 1;
   const min = Math.ceil(7);
   const max = Math.floor(10000000000);
   //The maximum is exclusive and the minimum is inclusive
@@ -90,6 +98,12 @@ app.get('/info', (request, response) => {
   response.send(`Phonebook has info for ${entries} people<br />
   ${dateinfo.toString()}`);
 });
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' });
+};
+
+app.use(unknownEndpoint);
 
 const PORT = 3001;
 app.listen(PORT, () => {
